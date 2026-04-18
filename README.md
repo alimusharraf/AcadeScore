@@ -175,8 +175,8 @@ Users can download their performance data in CSV format for analysis.
 ## 👨‍💻 Authors
 
 * Musharraf Ali
+* Lavanya G ( Contributor)
 * Jayalakshmi T H
-* Lavanya G
 
 ---
 
