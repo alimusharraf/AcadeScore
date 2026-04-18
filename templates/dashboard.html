@@ -1,0 +1,178 @@
+{% extends "dashboard_layout.html" %}
+{% block content %}
+
+<div class="dashboard-grid premium">
+
+    <!-- PERFORMANCE (SPAN 2) -->
+    <div class="card performance-matrix span-2">
+        <h3>📊 Performance Summary</h3>
+
+        <div class="matrix-grid">
+
+            <div class="matrix-box">
+                <span class="matrix-label">Last</span>
+                <span class="matrix-value">{{ last_performance }}%</span>
+            </div>
+
+            <div class="matrix-box">
+                <span class="matrix-label">Weekly</span>
+                <span class="matrix-value">{{ weekly_avg }}%</span>
+            </div>
+
+            <div class="matrix-box">
+                <span class="matrix-label">Monthly</span>
+                <span class="matrix-value">{{ monthly_avg }}%</span>
+            </div>
+
+            <div class="matrix-box highlight">
+                <span class="matrix-label">Consistency</span>
+                <span class="matrix-value">{{ consistency }}%</span>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- GRAPH (SPAN 2) -->
+    <div class="card span-2">
+        <h3>📈 Performance Trend</h3>
+        <canvas id="lineChart"></canvas>
+    </div>
+
+
+    <!-- IMPROVEMENT -->
+    <div class="card tracker-card">
+    <h3>🎯 Improvement Tracker</h3>
+
+    <div class="tracker-item">
+        <span>Study</span>
+        <div class="bar">
+            <div class="fill positive" style="width: {{ study_improvement|abs * 10 }}%"></div>
+        </div>
+        <span class="value">{{ study_improvement }}</span>
+    </div>
+
+    <div class="tracker-item">
+        <span>Attendance</span>
+        <div class="bar">
+            <div class="fill positive" style="width: {{ attendance_improvement|abs * 2 }}%"></div>
+        </div>
+        <span class="value">{{ attendance_improvement }}</span>
+    </div>
+
+    <div class="tracker-item">
+        <span>Sleep</span>
+        <div class="bar">
+            <div class="fill positive" style="width: {{ sleep_improvement|abs * 10 }}%"></div>
+        </div>
+        <span class="value">{{ sleep_improvement }}</span>
+    </div>
+
+    <div class="tracker-item">
+        <span>Mental</span>
+        <div class="bar">
+            <div class="fill negative" style="width: {{ mental_improvement|abs * 10 }}%"></div>
+        </div>
+        <span class="value">{{ mental_improvement }}</span>
+    </div>
+</div>
+
+
+    <!-- FOCUS -->
+    <div class="card suggestions-card">
+    <h3>🧠 Focus Area</h3>
+
+    {% if suggestions %}
+        {% for s in suggestions %}
+            <div class="suggestion danger">{{ s }}</div>
+        {% endfor %}
+    {% else %}
+        <div class="suggestion neutral">
+            No major issues — you're doing great!
+        </div>
+    {% endif %}
+</div>
+
+
+    <!-- IMPROVED -->
+    <div class="card improved-card">
+        <h3>🚀 What Improved</h3>
+
+        {% for i in improvements %}
+            <div class="suggestion success">{{ i }}</div>
+        {% endfor %}
+    </div>
+
+
+    <!-- PIE CHART (LAST SLOT) -->
+    <div class="card glass">
+        <h3>🧩 Influencing Factors</h3>
+        <canvas id="pieChart"></canvas>
+    </div>
+
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    const scores = {{ scores | tojson }};
+    const dates = {{ dates | tojson }};
+    const importance = {{ importance | tojson }};
+
+    console.log("Scores:", scores);   // DEBUG
+    console.log("Dates:", dates);
+
+    if(scores.length > 0){
+
+        // LINE CHART
+        const lineCanvas = document.getElementById("lineChart");
+
+        if(lineCanvas){
+            new Chart(lineCanvas, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Performance',
+                        data: scores,
+                        borderColor: '#ec4899',
+                        backgroundColor: 'rgba(236,72,153,0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                }
+            });
+        }
+
+        // PIE CHART
+        const pieCanvas = document.getElementById("pieChart");
+
+        if(pieCanvas){
+            new Chart(pieCanvas, {
+                type: 'pie',
+                data: {
+                    labels: [
+                        "Study","Social","Part Time",
+                        "Attendance","Sleep","Mental"
+                    ],
+                    datasets: [{
+                        data: importance,
+                        backgroundColor: [
+                            "#a855f7","#ec4899","#6366f1",
+                            "#f472b6","#8b5cf6","#db2777"
+                        ]
+                    }]
+                }
+            });
+        }
+
+    } else {
+        console.log("No data for charts");
+    }
+
+});
+</script>
+
+{% endblock %}

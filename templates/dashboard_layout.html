@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AcadeScore</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+
+    <button class="menu-btn" onclick="toggleSidebar()">
+        ☰
+    </button>
+
+    <div class="logo">
+        AcadeScore
+    </div>
+
+</div>
+
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+
+    <a href="{{ url_for('dashboard') }}">
+        Dashboard
+    </a>
+
+    <a href="{{ url_for('data_entry') }}">
+        Daily Entry
+    </a>
+
+    <a href="{{ url_for('history') }}">
+        Data History
+    </a>
+
+    <a href="{{ url_for('logout') }}">
+        Logout
+    </a>
+
+</div>
+
+
+<!-- MAIN CONTENT WRAPPER -->
+<div class="content-wrapper">
+
+    <div class="main-content" id="main">
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+</body>
+
+</html>

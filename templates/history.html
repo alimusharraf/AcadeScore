@@ -1,0 +1,147 @@
+{% extends "dashboard_layout.html" %}
+{% block content %}
+
+<div class="history-wrapper">
+
+    <!-- Header -->
+    <div class="history-top">
+
+        <div class="history-title">
+            📊 Data History
+            <span>Track, edit and export your performance</span>
+        </div>
+
+        <div class="history-controls">
+
+            <form method="GET" action="{{ url_for('history') }}" class="filter-form">
+
+                <select name="month" class="month-select">
+
+                    <option value="">All Months</option>
+
+                    <option value="01" {% if selected_month=="01" %}selected{% endif %}>January</option>
+                    <option value="02" {% if selected_month=="02" %}selected{% endif %}>February</option>
+                    <option value="03" {% if selected_month=="03" %}selected{% endif %}>March</option>
+                    <option value="04" {% if selected_month=="04" %}selected{% endif %}>April</option>
+                    <option value="05" {% if selected_month=="05" %}selected{% endif %}>May</option>
+                    <option value="06" {% if selected_month=="06" %}selected{% endif %}>June</option>
+                    <option value="07" {% if selected_month=="07" %}selected{% endif %}>July</option>
+                    <option value="08" {% if selected_month=="08" %}selected{% endif %}>August</option>
+                    <option value="09" {% if selected_month=="09" %}selected{% endif %}>September</option>
+                    <option value="10" {% if selected_month=="10" %}selected{% endif %}>October</option>
+                    <option value="11" {% if selected_month=="11" %}selected{% endif %}>November</option>
+                    <option value="12" {% if selected_month=="12" %}selected{% endif %}>December</option>
+
+                </select>
+
+                <button class="btn-filter">
+                    🔍 Filter
+                </button>
+
+            </form>
+
+            <a href="{{ url_for('export_csv') }}" class="btn-export">
+                ⬇ Export CSV
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Table -->
+    <div class="history-card">
+
+        <table class="history-table">
+
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Study</th>
+                    <th>Social</th>
+                    <th>Attendance</th>
+                    <th>Sleep</th>
+                    <th>Mental</th>
+                    <th>Score</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% if not entries %}
+                <tr>
+                    <td colspan="8" class="no-data">
+                        No records found
+                    </td>
+                </tr>
+                {% endif %}
+
+                {% for e in entries %}
+                <tr>
+
+                    <td>{{ e.entry_date.strftime("%d %b %Y") }}</td>
+
+                    <td>{{ e.study_hours }}</td>
+
+                    <td>{{ e.social_media }}</td>
+
+                    <td>{{ e.attendance }}%</td>
+
+                    <td>{{ e.sleep }}</td>
+
+                    <td>{{ e.mental_health }}</td>
+
+                    <td class="score">
+                        {{ "%.2f"|format(e.score) }}%
+                    </td>
+
+                    <td class="actions">
+
+                        <a href="{{ url_for('edit_entry', id=e.id) }}"
+                           class="btn-edit">
+                           Edit
+                        </a>
+
+                        <a href="{{ url_for('delete_entry', id=e.id) }}"
+                           class="btn-delete"
+                           onclick="return confirm('Delete this entry?')">
+                           Delete
+                        </a>
+
+                    </td>
+
+                </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- Pagination -->
+    <div class="pagination">
+
+        {% if page > 1 %}
+        <a href="{{ url_for('history', page=page-1, month=selected_month) }}">
+            ← Previous
+        </a>
+        {% endif %}
+
+        <span>
+            Page {{page}} of {{total_pages}}
+        </span>
+
+        {% if page < total_pages %}
+        <a href="{{ url_for('history', page=page+1, month=selected_month) }}">
+            Next →
+        </a>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

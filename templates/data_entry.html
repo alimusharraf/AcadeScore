@@ -1,0 +1,140 @@
+{% extends "dashboard_layout.html" %}
+{% block content %}
+
+<div class="entry-wrapper">
+
+    <div class="entry-card">
+
+        <h2 class="entry-title">
+            Daily Performance Entry
+        </h2>
+
+        {% if error %}
+        <div class="error-box">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" class="entry-form">
+
+            <!-- DATE -->
+            <div class="form-group full">
+                <label>Date</label>
+                <input
+                    type="date"
+                    name="entry_date"
+                    max="{{ today }}"
+                    required
+                >
+            </div>
+
+
+            <!-- STUDY -->
+            <div class="form-group">
+                <label>Study Hours</label>
+                <input
+                    type="number"
+                    step="0.1"
+                    name="study_hours"
+                    min="0"
+                    max="24"
+                    required
+                >
+            </div>
+
+
+            <!-- SOCIAL -->
+            <div class="form-group">
+                <label>Social Media Hours</label>
+                <input
+                    type="number"
+                    step="0.1"
+                    name="social_media"
+                    min="0"
+                    max="24"
+                    required
+                >
+            </div>
+
+
+            <!-- ATTENDANCE -->
+            <div class="form-group">
+                <label>Attendance (%)</label>
+                <input
+                    type="number"
+                    step="0.1"
+                    name="attendance"
+                    min="0"
+                    max="100"
+                    required
+                >
+            </div>
+
+
+            <!-- SLEEP -->
+            <div class="form-group">
+                <label>Sleep Hours</label>
+                <input
+                    type="number"
+                    step="0.1"
+                    name="sleep"
+                    min="0"
+                    max="24"
+                    required
+                >
+            </div>
+
+
+            <!-- MENTAL -->
+            <div class="form-group">
+                <label>Mental Health (1–10)</label>
+                <input
+                    type="number"
+                    step="0.1"
+                    name="mental_health"
+                    min="1"
+                    max="10"
+                    required
+                >
+            </div>
+
+
+            <!-- PART TIME -->
+            <div class="form-group full">
+                <label>Part Time Job</label>
+
+                <select name="part_time_job">
+
+                    <option value="0">
+                        No
+                    </option>
+
+                    <option value="1">
+                        Yes
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- SUBMIT -->
+            <div class="form-group full">
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                >
+                    Submit Entry
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
